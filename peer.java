@@ -7,6 +7,8 @@ public class peer {
     String publicKey;
     String privateKey;
     String blockAdd; // blockchainAddress of a node. hash of public key
+    PrivateKey pk;
+    PublicKey pubk;
     long UTXO;
 
     peer(String name, long UTXO) {
@@ -17,7 +19,9 @@ public class peer {
             keyPairGen.initialize(512);
             KeyPair pair = keyPairGen.generateKeyPair();
             PrivateKey privateKey = pair.getPrivate();
+            pk = privateKey;
             PublicKey publicKey = pair.getPublic();
+            pubk = publicKey;
             byte[] byte_pubkey = publicKey.getEncoded();
             String str_key = Base64.getEncoder().encodeToString(byte_pubkey);
             // System.out.println(str_key);
@@ -34,7 +38,7 @@ public class peer {
 
     }
 
-    private static String publicKey_to_SHA(String publicKey){
+    public static String publicKey_to_SHA(String publicKey){
         try{
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(publicKey.getBytes(StandardCharsets.UTF_8));

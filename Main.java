@@ -5,11 +5,11 @@ public class Main {
     public static block genesisBlock;
     public static ArrayList<block> blockchain = new ArrayList<block>();
 
-    public static peer Bob = new peer("Bob", 20);
+    public static peer Bob = new peer("Bob", 100);
     // peer.infoPeer(Bob);
     public static peer Alice = new peer("Alice", 30);
     // peer.infoPeer(Alice);
-    public static peer Tom = new peer("Tom", 100);
+    public static peer Tom = new peer("Tom", 10);
     // peer.infoPeer(Tom);
 
     public static block createGenesisBlock() {
@@ -33,13 +33,17 @@ public class Main {
     private static void makeTransaction(block b){
         transaction t = new transaction(1, b, Bob, Alice);
         if(t.validate == false) return;
-        
+        ArrayList<transaction> arrList = new ArrayList<transaction>();
+        arrList.add(t);
+        b.transactionsList = arrList;
     }
 
     public static void main(String args[]) throws java.lang.Exception {
 
         peer Miner = new peer("Miner", 0);
-
+        peer.infoPeer(Bob);
+        peer.infoPeer(Alice);
+        // peer.infoPeer(Tom);
         genesisBlock = createGenesisBlock();
         blockchain.add(genesisBlock);
 
