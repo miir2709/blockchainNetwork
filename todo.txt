@@ -1,4 +1,4 @@
 genesis block  complete
 
-blockAdd rename to blockchainAdd
-complete transaction
+blockAdd rename to blockchainAdd complete
+transaction

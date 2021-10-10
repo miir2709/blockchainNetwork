@@ -6,7 +6,6 @@ import java.nio.charset.StandardCharsets;
 public class block {
     long blockNumber;
     String miner;
-    long timeStamp;
     String currentBlockHash;
     String previousBlockHash;
     long nonce;
