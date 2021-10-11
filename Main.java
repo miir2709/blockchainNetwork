@@ -35,6 +35,7 @@ public class Main {
         if(t.validate == false) return;
         ArrayList<transaction> arrList = new ArrayList<transaction>();
         arrList.add(t);
+        transaction.transactionInfo(t);
         b.transactionsList = arrList;
     }
 
@@ -48,6 +49,7 @@ public class Main {
         blockchain.add(genesisBlock);
 
         mineBlock(Miner);
+        // mineBlock(Miner);
         block.blockInfo(blockchain);
 
     }

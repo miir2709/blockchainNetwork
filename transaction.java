@@ -1,5 +1,7 @@
 import java.security.*;
 
+import javax.sound.midi.Receiver;
+
 public class transaction {
     long transaction_id;
     peer sender;
@@ -18,9 +20,10 @@ public class transaction {
         if (amount > sender.UTXO) {
             System.out.println("Double spending detected. Aborting!!!");
             validate = false;
+        }else{
+            byte realSig [] = signTransaction(amount, sender);
+            verifyTransaction(amount, sender, receiver, realSig);
         }
-        byte realSig [] = signTransaction(amount, sender);
-        verifyTransaction(amount, sender, realSig);
     }
 
     private static long generateRandomAmount() {
@@ -54,7 +57,7 @@ public class transaction {
         return new byte[0];
     }
 
-    private static void verifyTransaction(long amount, peer sender, byte[] realSig){
+    private static void verifyTransaction(long amount, peer sender, peer receiver, byte[] realSig){
         byte data[] = intToByteArray((int)amount);
         try{
         Signature sig = Signature.getInstance("SHA1withDSA", "SUN");  
@@ -62,9 +65,29 @@ public class transaction {
         sig.update(data);
         
         boolean verifies = sig.verify(realSig);  
-        System.out.println(verifies);
+        System.out.println("Is the transaction verified among sender and receiver? " + verifies);
+        if(verifies){
+            System.out.println("The transaction amount is: " + amount);
+            sender.UTXO = sender.UTXO - amount;
+            receiver.UTXO = receiver.UTXO + amount;
+        }
         }catch(NoSuchAlgorithmException | NoSuchProviderException | InvalidKeyException | SignatureException e) {
             e.getStackTrace();
         }
+    }
+
+    public static void transactionInfo(transaction t){
+        System.out.println("================");
+        System.out.println("transaction id: " + t.transaction_id);
+        System.out.println("block number: " + t.block.blockNumber);
+        System.out.println("validate: " + t.validate);
+        System.out.println("amount: " + t.amount);
+        System.out.println("sender: " + t.sender.name) ;
+        System.out.println("receiver: " + t.receiver.name);
+        System.out.println("sender utxo after txn: " + t.sender.UTXO) ;
+        System.out.println("receiver utxo after txn: " + t.receiver.UTXO);
+        
+        
+
     }
 }
