@@ -1,7 +1,5 @@
 import java.security.*;
 
-import javax.sound.midi.Receiver;
-
 public class transaction {
     long transaction_id;
     peer sender;
