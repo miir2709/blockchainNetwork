@@ -48,7 +48,7 @@ public class Main {
         blockchain.add(genesisBlock);
 
         mineBlock(Miner);
-        // block.blockInfo(blockchain);
+        block.blockInfo(blockchain);
 
     }
 }
