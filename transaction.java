@@ -84,7 +84,8 @@ public class transaction {
         System.out.println("receiver: " + t.receiver.name);
         System.out.println("sender utxo after txn: " + t.sender.UTXO) ;
         System.out.println("receiver utxo after txn: " + t.receiver.UTXO);
-        
+        System.out.println("transaction complete");
+        System.out.println("================");
         
 
     }

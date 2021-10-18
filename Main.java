@@ -19,19 +19,23 @@ public class Main {
         genesisBlock.previousBlockHash = null;
         genesisBlock.nonce = 0;
         genesisBlock.transactionsList = null;
-        System.out.println("Genesis Block created");
+        System.out.println("======================");
+        System.out.println("\nGenesis Block created");
         return genesisBlock;
     }
 
     public static void mineBlock(peer Miner){
         block previous = blockchain.get(blockchain.size() - 1);
         block b = new block(previous.blockNumber+1, Miner, previous.currentBlockHash);
-        makeTransaction(b);
+        System.out.println("\nFirst transaction: ");
+        makeTransaction(b, Bob, Alice);
+        System.out.println("\nSecond transaction: ");
+        makeTransaction(b, Alice, Bob);
         blockchain.add(b);
     }
     
-    private static void makeTransaction(block b){
-        transaction t = new transaction(1, b, Bob, Alice);
+    private static void makeTransaction(block b, peer sender, peer receiver){
+        transaction t = new transaction(1, b, sender, receiver);
         if(t.validate == false) return;
         ArrayList<transaction> arrList = new ArrayList<transaction>();
         arrList.add(t);
@@ -50,6 +54,7 @@ public class Main {
 
         mineBlock(Miner);
         // mineBlock(Miner);
+
         block.blockInfo(blockchain);
 
     }

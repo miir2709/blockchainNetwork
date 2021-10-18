@@ -63,6 +63,8 @@ public class block {
     }
 
     public static void blockInfo(ArrayList<block> blockchain){
+        System.out.println("===========================");
+        System.out.println("Blockchain:");
         for(int i = 0; i < blockchain.size(); i++){
             block b = blockchain.get(i);
             System.out.println("=======================");
