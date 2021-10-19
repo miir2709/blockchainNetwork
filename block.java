@@ -11,7 +11,8 @@ public class block {
     long nonce;
     ArrayList<transaction> transactionsList;
     String difficulty = "0000"; 
-
+    long timestamp;
+    
     block(long blockNumber, peer peer, String previousBlockHash){
         // block b = new block();
         this.blockNumber = blockNumber;
@@ -22,6 +23,7 @@ public class block {
         String block_data = String.valueOf(blockNumber) + previousBlockHash;
         String message =   block_data + nonce; 
 
+        long startTime = System.nanoTime();
         while (true) {
             try{
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -36,7 +38,8 @@ public class block {
                 e.getStackTrace();
             }
         }
-
+        long endTime = System.nanoTime();
+        this.timestamp = (endTime - startTime) / 1000000;
         this.currentBlockHash = hashTest;
         this.previousBlockHash = previousBlockHash;
         this.nonce = nonce;
@@ -62,6 +65,24 @@ public class block {
         return buffer; 
     }
 
+    public static block createGenesisBlock() {
+        peer satoshi = new peer("Satioshi Nakamoto", 0);
+        block genesisBlock = new block(0, satoshi, "");
+        genesisBlock.currentBlockHash = "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f";
+        genesisBlock.previousBlockHash = null;
+        genesisBlock.nonce = 0;
+        genesisBlock.transactionsList = null;
+        System.out.println("======================");
+        System.out.println("\nGenesis Block created");
+        return genesisBlock;
+    }
+
+    public static void mineBlock(peer Miner){
+        block previous = Main.blockchain.get(Main.blockchain.size() - 1);
+        block b = new block(previous.blockNumber+1, Miner, previous.currentBlockHash);
+        Main.blockchain.add(b);
+    }
+
     public static void blockInfo(ArrayList<block> blockchain){
         System.out.println("===========================");
         System.out.println("Blockchain:");
@@ -70,6 +91,7 @@ public class block {
             System.out.println("=======================");
             System.out.println("Block Number: " + b.blockNumber);
             System.out.println("Block Miner: " + b.miner);
+            System.out.println("Timestamp: " + b.timestamp);
             System.out.println("Previous Block Hash: " + b.previousBlockHash);
             System.out.println("Current Block Hash: " + b.currentBlockHash);
             System.out.println("Block nonce: " + b.nonce);

@@ -59,10 +59,8 @@ public class peer {
     public static void infoPeer(peer p){
         System.out.println("==========================================");
         System.out.println("\nName: \t" + p.name);
-        System.out.println("\nPrivate Key: " + p.publicKey);
-        System.out.println("\nPublic Key: " + p.privateKey);
-        System.out.println("Block Address: " + p.blockAdd);
+        // System.out.println("\nPrivate Key: " + p.publicKey);
+        // System.out.println("\nPublic Key: " + p.privateKey);
+        System.out.println("Pay to Public Key Hash Address: " + p.blockAdd);
     }
-
-    
 }

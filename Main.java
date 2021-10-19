@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-
+import java.util.*;
 public class Main {
 
     public static block genesisBlock;
@@ -12,50 +12,41 @@ public class Main {
     public static peer Tom = new peer("Tom", 10);
     // peer.infoPeer(Tom);
 
-    public static block createGenesisBlock() {
-        peer satoshi = new peer("Satioshi Nakamoto", 0);
-        block genesisBlock = new block(0, satoshi, "");
-        genesisBlock.currentBlockHash = "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f";
-        genesisBlock.previousBlockHash = null;
-        genesisBlock.nonce = 0;
-        genesisBlock.transactionsList = null;
-        System.out.println("======================");
-        System.out.println("\nGenesis Block created");
-        return genesisBlock;
-    }
-
-    public static void mineBlock(peer Miner){
-        block previous = blockchain.get(blockchain.size() - 1);
-        block b = new block(previous.blockNumber+1, Miner, previous.currentBlockHash);
-        System.out.println("\nFirst transaction: ");
-        makeTransaction(b, Bob, Alice);
-        System.out.println("\nSecond transaction: ");
-        makeTransaction(b, Alice, Bob);
-        blockchain.add(b);
-    }
-    
-    private static void makeTransaction(block b, peer sender, peer receiver){
-        transaction t = new transaction(1, b, sender, receiver);
-        if(t.validate == false) return;
-        ArrayList<transaction> arrList = new ArrayList<transaction>();
-        arrList.add(t);
-        transaction.transactionInfo(t);
-        b.transactionsList = arrList;
-    }
-
     public static void main(String args[]) throws java.lang.Exception {
 
+        Scanner sc = new Scanner(System.in);
         peer Miner = new peer("Miner", 0);
         peer.infoPeer(Bob);
         peer.infoPeer(Alice);
         // peer.infoPeer(Tom);
-        genesisBlock = createGenesisBlock();
+        genesisBlock = block.createGenesisBlock();
         blockchain.add(genesisBlock);
-
-        mineBlock(Miner);
-        // mineBlock(Miner);
-
-        block.blockInfo(blockchain);
-
+        while(true){
+            System.out.println("\nPress: \n (1) mine a block \n (2) add a transaction to current block \n (3) print the blockchain");
+            int choice = sc.nextInt();
+            switch(choice){
+                case 1:
+                    block.mineBlock(Miner);
+                    System.out.println("\n============================\nSuccessfully mined a block.");
+                    break;
+                case 2: 
+                    if(blockchain.size() == 1) {
+                        System.out.println("Please mine a block to make a transaction.");
+                        break;
+                    }
+                    else{
+                        transaction.makeTransaction(blockchain.get(blockchain.size() - 1), Bob, Alice);
+                        break;
+                    }
+                case 3: 
+                    System.out.println("\n Displaying the blockchain:\n ");
+                    block.blockInfo(blockchain);
+                    break;
+            }
+            System.out.println("\nDo you want to proceed? Press Y to contine. N to exit");
+            String s = sc.next();
+            if(s.equals("n") || s.equals("N")) break; 
+        }
+        sc.close();
     }
 }
