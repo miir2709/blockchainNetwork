@@ -6,7 +6,7 @@ public class peer {
     String name;
     String publicKey;
     String privateKey;
-    String blockAdd; // blockchainAddress of a node. hash of public key
+    String blockAdd; // pay to public key hash of a node. hash of public key
     PrivateKey pk;
     PublicKey pubk;
     long UTXO;

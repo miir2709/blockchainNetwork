@@ -9,12 +9,11 @@ public class block {
     String currentBlockHash;
     String previousBlockHash;
     long nonce;
-    ArrayList<transaction> transactionsList;
-    String difficulty = "0000"; 
+    ArrayList<transaction> transactionsList = new ArrayList<transaction>();
+    StringBuilder difficulty = new StringBuilder("00");
     long timestamp;
     
     block(long blockNumber, peer peer, String previousBlockHash){
-        // block b = new block();
         this.blockNumber = blockNumber;
         this.miner = peer.name;
         
@@ -31,7 +30,7 @@ public class block {
             hashTest = bytesToHex(reverseBytes(hash));
             // System.out.println("Hash: " + hashTest);
             
-            if(hashTest.substring(0, difficulty.length()).equals(difficulty))
+            if(hashTest.substring(0, difficulty.length()).equals(difficulty.toString()))
                 break;
             nonce++;
             }catch(NoSuchAlgorithmException e){
@@ -77,10 +76,11 @@ public class block {
         return genesisBlock;
     }
 
-    public static void mineBlock(peer Miner){
+    public static block mineBlock(peer Miner){
         block previous = Main.blockchain.get(Main.blockchain.size() - 1);
         block b = new block(previous.blockNumber+1, Miner, previous.currentBlockHash);
         Main.blockchain.add(b);
+        return b;
     }
 
     public static void blockInfo(ArrayList<block> blockchain){
@@ -95,6 +95,12 @@ public class block {
             System.out.println("Previous Block Hash: " + b.previousBlockHash);
             System.out.println("Current Block Hash: " + b.currentBlockHash);
             System.out.println("Block nonce: " + b.nonce);
+            if(b.transactionsList != null){
+                for(int j = 0; j < b.transactionsList.size(); j++){
+                    transaction t = b.transactionsList.get(j);
+                    transaction.transactionInfo(t);
+                }
+            }
         }
     }    
 }

@@ -1,17 +1,18 @@
 import java.security.*;
-import java.util.*;
 
 public class transaction {
+
+    public static int transactionLimit = 3;
     long transaction_id;
     peer sender;
     peer receiver;
-    block block;
+    block transactionblock;
     long amount;
     boolean validate = true;
 
     transaction(long id, block block, peer sender, peer receiver) {
         this.transaction_id = id;
-        this.block = block;
+        this.transactionblock = block;
         this.sender = sender;
         this.receiver = receiver;
         this.amount = generateRandomAmount();
@@ -84,16 +85,33 @@ public class transaction {
     }
 
     public static void makeTransaction(block b, peer sender, peer receiver){
-        transaction t = new transaction(1, b, sender, receiver);
-        if(t.validate == false) return;
-        if(b.transactionsList == null) 
-            t.transaction_id = 1;
+        long temp_transaction_id = 0;
+        block temp_block;
+        block newBlock = null;
+        if(b.transactionsList == null || b.transactionsList.size() == 0) 
+            temp_transaction_id = 1;
         else
-            t.transaction_id = b.transactionsList.get(b.transactionsList.size() - 1).transaction_id + 1;
-        ArrayList<transaction> arrList = new ArrayList<transaction>();
-        arrList.add(t);
-        transaction.transactionInfo(t);
-        b.transactionsList = arrList;
+            temp_transaction_id = b.transactionsList.get(b.transactionsList.size() - 1).transaction_id + 1;
+
+        if(b.transactionsList.size() == 3){
+            newBlock = block.mineBlock(Main.Miner);
+            System.out.println("===================");
+            System.out.println("Transaction limit! Mining New Block.\nThis transaction will get alloted to new block");
+            System.out.println("Time taken to mine new block: " + newBlock.timestamp);
+            temp_block = newBlock;
+            temp_transaction_id = 1;
+        }else 
+            temp_block = b;
+
+        transaction t = new transaction(temp_transaction_id, temp_block, sender, receiver);
+        if(t.validate == false) return;
+        
+        if(b.transactionsList == null || b.transactionsList.size() < 3){
+            b.transactionsList.add(t);
+        }else{
+            newBlock.transactionsList.add(t);
+        }
+        transactionInfo(t);
     }
 
     private static void beforeTransactionInfo(peer sender, peer receiver, long amount){
@@ -106,7 +124,7 @@ public class transaction {
     public static void transactionInfo(transaction t){
         System.out.println("================");
         System.out.println("transaction id: " + t.transaction_id);
-        System.out.println("block number: " + t.block.blockNumber);
+        System.out.println("block number: " + t.transactionblock.blockNumber);
         System.out.println("validate: " + t.validate);
         System.out.println("amount: " + t.amount);
         System.out.println("sender: " + t.sender.name + " | sender utxo after txn: " + t.sender.UTXO) ;

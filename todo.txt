@@ -3,8 +3,9 @@ genesis block  complete
 blockAdd rename to blockchainAdd complete
 transaction complete
 
-addTransaction function for appending transaction to current block 
+addTransaction function for appending transaction to current block complete
 
+to do: 1 
 block will have a transaction limit
 after the transactions limit is reached, difficulty of transaction will be increased 
 the time to mine the successive blocks will also increase exponentially
