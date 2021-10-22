@@ -10,13 +10,13 @@ public class block {
     String previousBlockHash;
     long nonce;
     ArrayList<transaction> transactionsList = new ArrayList<transaction>();
-    StringBuilder difficulty = new StringBuilder("00");
+    StringBuilder difficulty = new StringBuilder();
     long timestamp;
     
-    block(long blockNumber, peer peer, String previousBlockHash){
+    block(long blockNumber, peer peer, String previousBlockHash, String d){
         this.blockNumber = blockNumber;
         this.miner = peer.name;
-        
+        this.difficulty = this.difficulty.append(d);
         long nonce = 1;
         String hashTest = null;
         String block_data = String.valueOf(blockNumber) + previousBlockHash;
@@ -66,7 +66,7 @@ public class block {
 
     public static block createGenesisBlock() {
         peer satoshi = new peer("Satioshi Nakamoto", 0);
-        block genesisBlock = new block(0, satoshi, "");
+        block genesisBlock = new block(0, satoshi, "", "0");
         genesisBlock.currentBlockHash = "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f";
         genesisBlock.previousBlockHash = null;
         genesisBlock.nonce = 0;
@@ -78,7 +78,8 @@ public class block {
 
     public static block mineBlock(peer Miner){
         block previous = Main.blockchain.get(Main.blockchain.size() - 1);
-        block b = new block(previous.blockNumber+1, Miner, previous.currentBlockHash);
+        StringBuilder sb = previous.difficulty;
+        block b = new block(previous.blockNumber+1, Miner, previous.currentBlockHash,sb.append("0").toString());
         Main.blockchain.add(b);
         return b;
     }
@@ -91,6 +92,7 @@ public class block {
             System.out.println("=======================");
             System.out.println("Block Number: " + b.blockNumber);
             System.out.println("Block Miner: " + b.miner);
+            System.out.println("Diffculty: "+ b.difficulty);
             System.out.println("Timestamp: " + b.timestamp);
             System.out.println("Previous Block Hash: " + b.previousBlockHash);
             System.out.println("Current Block Hash: " + b.currentBlockHash);

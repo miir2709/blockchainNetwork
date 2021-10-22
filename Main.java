@@ -13,7 +13,6 @@ public class Main {
     public static peer Miner = new peer("Miner", 0);
     public static void main(String args[]) throws java.lang.Exception {
         Scanner sc = new Scanner(System.in);
-        
         peer.infoPeer(Bob);
         peer.infoPeer(Alice);
         // peer.infoPeer(Tom);
@@ -27,7 +26,7 @@ public class Main {
             case 1:
                 block b = block.mineBlock(Miner);
                 System.out.println(
-                        "\n============================\nSuccessfully mined a block in " + b.timestamp + " miliseconds.");
+                        "\n============================\nSuccessfully mined a block with diffculty: "+ b.difficulty +" in " + b.timestamp + " miliseconds.");
                 break;
             case 2:
                 if (blockchain.size() == 1) {

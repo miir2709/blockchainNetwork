@@ -96,8 +96,9 @@ public class transaction {
         if(b.transactionsList.size() == 3){
             newBlock = block.mineBlock(Main.Miner);
             System.out.println("===================");
-            System.out.println("Transaction limit! Mining New Block.\nThis transaction will get alloted to new block");
-            System.out.println("Time taken to mine new block: " + newBlock.timestamp);
+            System.out.println("Transaction limit reached! Mining New Block.\nThis transaction will get alloted to new block");
+            System.out.println("Difficulty of the blockmined: " + newBlock.difficulty);
+            System.out.println("Time taken to mine new block: " + newBlock.timestamp); 
             temp_block = newBlock;
             temp_transaction_id = 1;
         }else 
